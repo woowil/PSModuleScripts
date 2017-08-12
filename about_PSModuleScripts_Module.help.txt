@@ -1,0 +1,8 @@
+This is module help
+
+PSMS (PowerShell Module Scripts) was initially made by Woodworth Wilson (EVRY)
+The intention of thios module is facilitet management of Application Services 8Appnet, Biztalk and CRM)
+
+Please run "Get-Command -Module PSMS" for help information on specific cmdlets
+
+Always test your function: .\EVRY\Debug\Test-DebugScripts.ps1
