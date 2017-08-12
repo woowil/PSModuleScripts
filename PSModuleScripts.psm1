@@ -9,6 +9,7 @@
 
 # Error default handling. Check Get-Help about_commonparameters
 $ErrorActionPreference = "Stop" # Do not change. This shows all error upon import-module
+$VerbosePreference = "Continue"
 
 $script:modulename = ($ExecutionContext.SessionState.Module).ToString()
 $script:identity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -44,7 +45,6 @@ $hash = New-Object -TypeName HashTable -ArgumentList @{
     HasExcel          = $False
     ShowLog           = $True
     EventLogSource    = "PowerShell Module " + $modulename.ToString().toUpper()
-    Scripts           = @()
     Settings          = New-Object -TypeName HashTable -ArgumentList @{
         InitializedCommon = $false
     }
@@ -70,7 +70,7 @@ $Files = Get-ChildItem -Path "$path\Scripts" -Recurse -Include "*.ps1" -Filter "
 ForEach ($File in $Files) {
     try {
         $FullName = $File.FullName
-        Write-Debug -Message "Loading:  $FullName"
+        Write-Host -Message "Loading:  $FullName"
         . $FullName
     }
     catch [Exception] {
@@ -79,16 +79,13 @@ ForEach ($File in $Files) {
         Write-Host -Object $Message -ForegroundColor Red
         break
     }
-    finally {
-        $__nPSMS.Scripts += $FullName
-    }
 }
 
 # Export all commands except for TheVerb-TheNoun
 # Export-ModuleMember -Function * -Alias *
 
 # Initializing the Module
-Initialize-eSettings -InputObject $__nPSMS
+Initialize-nCommon -InputObject $__nPSMS
 
 $script:mObj = $MyInvocation.MyCommand.ScriptBlock.Module
 $script:mName = $MyInvocation.MyCommand.ScriptBlock.Module.name
