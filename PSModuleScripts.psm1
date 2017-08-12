@@ -45,15 +45,14 @@ $hash = New-Object -TypeName HashTable -ArgumentList @{
     ShowLog           = $True
     EventLogSource    = "PowerShell Module " + $modulename.ToString().toUpper()
     Scripts           = @()
-    #Settings          = New-Object -TypeName HashTable -ArgumentList @{}
+    Settings          = New-Object -TypeName HashTable -ArgumentList @{
+        InitializedCommon = $false
+    }
     Invocation        = New-Object -TypeName HashTable -ArgumentList @{
         Arguments  = ""
         Identity   = ""
         Time       = Get-Date
         LastPrefix = ""
-    }
-    Misc              = New-Object -TypeName HashTable -ArgumentList @{
-        RoboCopyExitCode = New-Object -TypeName HashTable -ArgumentList @{}
     }
     Errors            = [System.Collections.ArrayList] @()  # [Environment]::ExitCode, [Environment]::Exit(8)
     Warnings          = [System.Collections.ArrayList] @()  # [Environment]::ExitCode, [Environment]::Exit(8)
@@ -89,14 +88,10 @@ ForEach ($File in $Files) {
 # Export-ModuleMember -Function * -Alias *
 
 # Initializing the Module
-Initialize-eSettings -InputObject $__nPSMS -DefaultMethods -DefaultGlobal  # These must be initialized FIRST
-Initialize-eSettings -InputObject $__nPSMS -DefaultCustom # This must be initialized EXACTLY HERE for DefaultCustom
-Initialize-eSettings -InputObject $__nPSMS -DefaultLogs # This must be initialized EXACTLY HERE for DefaultLogs
-Initialize-eSettings -InputObject $__nPSMS -DefaultOther
+Initialize-eSettings -InputObject $__nPSMS
 
 $script:mObj = $MyInvocation.MyCommand.ScriptBlock.Module
 $script:mName = $MyInvocation.MyCommand.ScriptBlock.Module.name
-
 $mObj.OnRemove = {
     if (Test-path -path Alias:\Log -PathType Leaf) {
 
