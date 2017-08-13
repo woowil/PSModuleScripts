@@ -178,5 +178,6 @@ Function Test-nADUser {
     }
     END {
         Write-Verbose -Message "$LPP Exiting $($MyInvocation.MyCommand)"
+        return $IsTest
     }
 } # End Test-nADUser

@@ -88,15 +88,6 @@ Function Remove-nADUser {
 
 	.OUTPUTS
 
-
-	.NOTES
-        Name         : Remove-nADUser
-	    Module       : PSMS
-        Author       : Woodworth.Wilson@evry.com
-        Version      : 1.0
-	    Changed Log  : 2012-02-15; 1.0; Woodworth.Wilson@evry.com; Initial Version
-	                 : 2013-03-02; 1.1; Woodworth.Wilson@evry.com; Added section for ..
-
     .LINK
         Get-dSAMUser
 		Get-nADUser

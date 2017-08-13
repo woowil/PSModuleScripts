@@ -117,13 +117,6 @@ Function Get-nADUser {
 
 	.OUTPUTS
 
-
-	.NOTES
-        Name         : Get-nADUser
-	    Author       : Woodworth.Wilson@evry.com
-        Changed Log  : 2013-03-XX; 1.0; Woodworth.Wilson@evry.com; Initial Version
-	                 : 2015-05-20; 1.1; Woodworth.Wilson@evry.com; Added section for ..
-					 : 2015-05-20; 1.2; Woodworth.Wilson@evry.com; Fixed UserMatch type issue
     .LINK
 
 
@@ -194,14 +187,14 @@ Function Get-nADUser {
     PROCESS {
         try {
             ForEach ($user in $Users) {
-                if ($i -lt 2) { Write-Verbose -Message "$LPP# Processing $len users" -Fore Yellow}
+                if ($i -lt 2) { Write-Verbose -Message "$LPP# Processing $len users"}
                 try {
                     $oUser = Get-ADUser -Identity $User -Properties * #-ErrorAction SilentlyContinue
                     if ($oUser.whenChanged -lt $ChangedAfter) {continue}
                     $Found++
                 }
                 catch [Exception] {
-                    Write-Verbose -Message "$LPP## $($_.Exception.Message.Trim())" -LogType Warning
+                    Write-Verbose -Message "$LPP## $($_.Exception.Message.Trim())"
                     continue
                 }
 
@@ -232,16 +225,6 @@ Function Get-nADUser {
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__Domain" -Value $__userdomain -Force
 
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__EmailAddress" -Value $oUser.mail -Force
-                try {
-                    $EmployeeNumber = $oUser.extensionAttribute5 # EmployeeNumber
-                    if (-not ($EmployeeNumber -is [int])) {
-                        $EmployeeNumber = $oUser.EmployeeNumber
-                    }
-                }
-                catch {
-                    $EmployeeNumber = ""
-                }
-                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__EmployeeNumber" -Value $EmployeeNumber -Force
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__EmployeeType" -Value $oUser.employeeType -Force
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__Enabled" -Value $oUser.Enabled -Force
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__ExchangeId" -Value $oUser.mailNickname -Force
@@ -260,7 +243,7 @@ Function Get-nADUser {
                     if ($oUser.HomeDirectory -ne $Null) {
                         try { $res = Test-Path -Path $oUser.HomeDirectory -PathType Container -ErrorAction 0 }
                         catch {
-                            Write-Verbose -Message "HomeDirectory access error for $__identity on path=$($oUser.HomeDirectory)" -LogType Warning
+                            Write-Verbose -Message "HomeDirectory access error for $__identity on path=$($oUser.HomeDirectory)"
                         }
                     }
                     Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__HomeDirExist" -Value $res -Force
@@ -269,7 +252,7 @@ Function Get-nADUser {
                         $res = (Get-Item -Path $oUser.HomeDirectory)
                         try {$res = ($res.GetAccessControl.Invoke()).Access}
                         catch {
-                            Write-Verbose -Message "NTFS ACL Security access error for $__identity on path=$($oUser.HomeDirectory)" -LogType Warning
+                            Write-Verbose -Message "NTFS ACL Security access error for $__identity on path=$($oUser.HomeDirectory)"
                         }
                     }
                     Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__HomeDirAccess" -Value $res -Force
@@ -366,7 +349,6 @@ Function Get-nADUser {
     }
     END {
         Write-Verbose -Message "$LPP Exiting $($MyInvocation.MyCommand)"
-
     }
 } # End Get-nADUser
 

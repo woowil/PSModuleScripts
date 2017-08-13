@@ -6,7 +6,7 @@
 # IF THIS CODE AND INFORMATION IS MODIFIED, THE ENTIRE RISK OF USE OR RESULTS IN
 # CONNECTION WITH THE USE OF THIS CODE AND INFORMATION REMAINS WITH THE USER.
 
-Function Set-eADUser {
+Function Set-nADUser {
     <#
 	.SYNOPSIS
         Customized Active Directory user account change with spesific properties
@@ -26,7 +26,7 @@ Function Set-eADUser {
 	.PARAMETER HomeDirectory
         Specifies the destination Home Directory property of the users account(s).
 
-    .PARAMETER PlaceName
+    .PARAMETER State
         Specifies the destination State property of the users account(s).
 
 	.PARAMETER TSProfilePath
@@ -42,7 +42,7 @@ Function Set-eADUser {
         Specifies the prefix used in message log. Default is '#'
 
     .EXAMPLE
-		Get-eFromSAMDat | Set-eADUser -ShowLog -Department 8888
+		Get-eFromSAMDat | Set-nADUser -ShowLog -Department 8888
 
 		Result
 		-----------
@@ -53,7 +53,7 @@ Function Set-eADUser {
 		The Description..
 
 	.EXAMPLE
-		Get-eADUser AS88880 | Set-eADUser -ShowLog -Department 8888
+		Get-nADUser AS88880 | Set-nADUser -ShowLog -Department 8888
 
 		Result
 		-----------
@@ -64,7 +64,7 @@ Function Set-eADUser {
 		The Description..
 
 	.EXAMPLE
-		"AS88880","AS88881" | Set-eADUser -ShowLog -Department 8888 -Verbose
+		"AS88880","AS88881" | Set-nADUser -ShowLog -Department 8888 -Verbose
 
 		Result
 		-----------
@@ -75,7 +75,7 @@ Function Set-eADUser {
 		The Description..
 
     .EXAMPLE
-		Set-eADUser -Users AS88880,AS88882 -Department 8888
+		Set-nADUser -Users AS88880,AS88882 -Department 8888
 
 		Result
 		-----------
@@ -86,17 +86,8 @@ Function Set-eADUser {
 		The Description..
 
 	.OUTPUTS
-
-
-	.NOTES
-        Name         : Set-eADUser
-	    Module       : PSMS
-        Author       : Woodworth.Wilson@evry.com
-        Changed Log  : 2012-02-15; 1.0; Woodworth.Wilson@evry.com; Initial Version
-	                 : 2013-03-02; 1.1; Woodworth.Wilson@evry.com; Added section for ..
-
     .LINK
-        Get-eADUser
+        Get-nADUser
 
 	#>
 
@@ -117,7 +108,7 @@ Function Set-eADUser {
         [string] $ScriptPath,
 
         [Alias("State", "st", "Place")]
-        [string] $PlaceName,
+        [string] $State,
 
         [Alias("TSProf")]
         [string] $TSProfilePath,
@@ -140,17 +131,13 @@ Function Set-eADUser {
             $isValueFromPipeline = $True
             Write-Verbose -Message "$LPP# Processing $($Users.Length) user instances"
         }
+        if (!($State -or $Department -or $HomeDirectory -or $TSProfilePath)) {
+            Write-Verbose -Message "$LPP## WARNING: None of the required properties were entered. Exiting"
+            break;
+        }
     }
     PROCESS {
         try {
-            if (!($PlaceName -or $Department -or $HomeDirectory -or $TSProfilePath)) {
-                Write-Verbose -Message "$LPP## WARNING: None of the required properties were entered. Exiting"
-                break;
-            }
-            elseif (!$PlaceName -or (!(Test-Path -Path "$DFSHomePath\$PlaceName" -PathType Container) -and ($PlaceName -notmatch "NedreSkoyenVei"))) {
-                Write-Verbose -Message "$LPP## WARNING: The PlaceName is invalid. Exiting"
-                break;
-            }
             ForEach ($User in $Users) {
                 try {
                     $User = $User.__UserName
@@ -201,7 +188,7 @@ Function Set-eADUser {
                         $tmpOK = $True
                     }
                     if ($Force -or $tmpOK) {
-                        Write-Verbose -Message "$LPP### Setting TSProfilePath=$TSProfilePath on user $User" -ForegroundColor Yellow
+                        Write-Verbose -Message "$LPP### Setting TSProfilePath=$TSProfilePath on user $User"
                         $oUser2.psbase.InvokeSet("terminalservicesprofilepath", $TSProfilePath)
                         $oUser2.SetInfo()
                     }
@@ -209,9 +196,9 @@ Function Set-eADUser {
                         Write-Verbose -Message "$LPP### Skipping already defined TSProfilePath=$TSProfilePath"
                     }
                 }
-                if ($PlaceName) {
-                    $str = [string]::Concat($str, ", PlaceName=$PlaceName")
-                    $oUser.State = $PlaceName
+                if ($State) {
+                    $str = [string]::Concat($str, ", State=$State")
+                    $oUser.State = $State
                 }
                 if ($IsFromSAM) {
                     #$oUser.Description = "SAM Jupiter inmelding"
@@ -219,8 +206,8 @@ Function Set-eADUser {
                 $str = $str -replace "^, "
                 if ($str -eq "") {continue}
 
-                Write-Verbose -Message "$LPP### Setting $str on user: $User" -ForegroundColor Yellow
-                Set-ADUser -Instance $oUser | Out-File -FilePath $__eJobFile -Append
+                Write-Verbose -Message "$LPP### Setting $str on user: $User"
+                Set-ADUser -Instance $oUser
             }
         }
         catch [Exception] {
@@ -230,5 +217,5 @@ Function Set-eADUser {
     END {
         Write-Verbose -Message "$LPP Exiting $($MyInvocation.MyCommand)"
     }
-} # End Set-eADUser
+} # End Set-nADUser
 

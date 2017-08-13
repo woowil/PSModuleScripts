@@ -46,6 +46,7 @@ $hash = New-Object -TypeName HashTable -ArgumentList @{
     ShowLog           = $True
     EventLogSource    = "PowerShell Module " + $modulename.ToString().toUpper()
     Settings          = New-Object -TypeName HashTable -ArgumentList @{
+        IsADLoaded        = $False
         InitializedCommon = $false
     }
     Invocation        = New-Object -TypeName HashTable -ArgumentList @{
@@ -70,7 +71,7 @@ $Files = Get-ChildItem -Path "$path\Scripts" -Recurse -Include "*.ps1" -Filter "
 ForEach ($File in $Files) {
     try {
         $FullName = $File.FullName
-        Write-Host -Message "Loading:  $FullName"
+        Write-Verbose -Message "Loading: $FullName"
         . $FullName
     }
     catch [Exception] {
