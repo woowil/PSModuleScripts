@@ -1,1 +1,2 @@
-readme_ignore.txt
+*.log
+\Scripts\[Customer]
