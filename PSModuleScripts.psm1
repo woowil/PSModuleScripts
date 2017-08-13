@@ -81,9 +81,6 @@ ForEach ($File in $Files) {
     }
 }
 
-# Export all commands except for TheVerb-TheNoun
-# Export-ModuleMember -Function * -Alias *
-
 # Initializing the Module
 Initialize-nCommon -InputObject $__nPSMS
 
