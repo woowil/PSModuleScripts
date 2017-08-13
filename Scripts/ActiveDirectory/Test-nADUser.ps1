@@ -173,7 +173,7 @@ Function Test-nADUser {
             }
         }
         catch [Exception] {
-            Write-Error -Exception $_
+            Write-Error -Exception $_.Exception
         }
     }
     END {

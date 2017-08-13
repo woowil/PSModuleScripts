@@ -133,7 +133,7 @@ Function Backup-nADUsers {
             }
         }
         catch [Exception] {
-            Write-Error -Exception $_ -Message "Failed for distinguishedName. $distinguishedName"
+            Write-Error -Exception $_.Exception
         }
         finally {
             if ($i -gt 0) {

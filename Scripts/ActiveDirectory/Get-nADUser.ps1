@@ -208,8 +208,6 @@ Function Get-nADUser {
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__Company" -Value $oUser.Company -Force
                 $Country = $TextInfo.ToTitleCase(($oUser.co + "").ToLower())
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__Country" -Value $Country -Force # Capitalize
-                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__CostPlace" -Value $null -Force
-                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__CostCenter" -Value $null -Force
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__Created" -Value $oUser.whenCreated -Force
 
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__Deleted" -Value $oUser.Deleted -Force
@@ -228,9 +226,6 @@ Function Get-nADUser {
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__EmployeeType" -Value $oUser.employeeType -Force
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__Enabled" -Value $oUser.Enabled -Force
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__ExchangeId" -Value $oUser.mailNickname -Force
-                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__ExtAttrCostCenter" -Value $null -Force
-                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__ExtAttrCostPlace" -Value $null -Force
-                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__ExtAttrOrgStructure" -Value $null -Force
 
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__FaxWork" -Value $oUser.Fax -Force
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__FirstName" -Value $oUser.GivenName -Force
@@ -294,9 +289,11 @@ Function Get-nADUser {
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__PasswordLastSet" -Value $__nPSMS.__GetInt64Time($oUser.pwdLastSet) -Force
 
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__ProfilePath" -Value $oUser.ProfilePath -Force
-                $res = $False
-                if ($oUser.ProfilePath -ne $Null) { $res = Test-Path -Path $oUser.ProfilePath -PathType Container -ErrorAction 0}
-                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__ProfilePathExist" -Value $res -Force
+                if ($ExtendedProperty) {
+                    $res = $False
+                    if ($oUser.ProfilePath -ne $Null) { $res = Test-Path -Path $oUser.ProfilePath -PathType Container -ErrorAction 0}
+                    Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__ProfilePathExist" -Value $res -Force
+                }
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__PostalCode" -Value $oUser.PostalCode -Force
                 $PostPlace = $oUser.StreetAddress + ", " + $oUser.PostalCode + " " + $oUser.City
                 $PostPlace = $PostPlace.Trim() -replace "[ \t]+", " " -replace "^[, \t]+"
@@ -325,18 +322,18 @@ Function Get-nADUser {
                 try {$TSProfilePath = $oUser2.psbase.InvokeGet("terminalservicesprofilepath")} catch {$TSProfilePath = ""}
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__TSProfilePath" -Value $TSProfilePath -Force
                 $tmp = $oUser.__TSProfilePath
-                $res = $False
-
-                if ( (-not [String]::IsNullOrEmpty($tmp)) -and (Test-Path -Path $tmp -IsValid)) {
-                    $res = Test-Path -Path $tmp -PathType Container -ErrorAction 0
+                if ($ExtendedProperty) {
+                    $res = $False
+                    if ( (-not [String]::IsNullOrEmpty($tmp)) -and (Test-Path -Path $tmp -IsValid)) {
+                        $res = Test-Path -Path $tmp -PathType Container -ErrorAction 0
+                    }
+                    Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__TSProfilePathExist" -Value $res -Force
                 }
-                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__TSProfilePathExist" -Value $res -Force
+                try {$TSHomeDrive = $oUser2.psbase.InvokeGet("terminalServicesHomeDrive")} catch {$TSHomeDrive = ""}
+                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__TSHomeDrive" -Value $TSHomeDrive -Force
 
-                #try{$TSHomeDrive = $oUser2.psbase.InvokeGet("terminalServicesHomeDrive")} catch{$TSHomeDrive = ""}
-                #Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__TSHomeDrive" -Value $TSHomeDrive -Force
-
-                #try{$TSHomeDir = $oUser2.psbase.InvokeGet("terminalServicesHomeDirectory")} catch{$TSHomeDir = ""}
-                #Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__TSHomeDirectory" -Value $TSHomeDir -Force
+                try {$TSHomeDir = $oUser2.psbase.InvokeGet("terminalServicesHomeDirectory")} catch {$TSHomeDir = ""}
+                Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__TSHomeDirectory" -Value $TSHomeDir -Force
 
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__UserID" -Value $oUser.SamAccountName -Force
 
@@ -344,11 +341,10 @@ Function Get-nADUser {
             }
         }
         catch [Exception] {
-            Write-Error -Exception $_
+            Write-Error -Exception $_.Exception
         }
     }
     END {
         Write-Verbose -Message "$LPP Exiting $($MyInvocation.MyCommand)"
     }
 } # End Get-nADUser
-
