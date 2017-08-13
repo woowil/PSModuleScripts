@@ -1,4 +1,4 @@
-#  Copyright (c) EVRY AS. All rights reserved.
+#  Copyright (c) nOsliw Solutions. All rights reserved.
 #
 # THIS SAMPLE CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
 # WHETHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
@@ -35,25 +35,11 @@ Function Remove-nADUser {
 	.PARAMETER IsFromSAM
         Specifies if the user account(s) is from SAM Jupiter
 
-	.PARAMETER ShowLog
-        Shows the progress message log.
-
 	.PARAMETER LPP
         Specifies the prefix used in message log. Default is '#'
 
     .EXAMPLE
-		Get-dSAMUser | Remove-nADUser -ShowLog -Department 8888
-
-		Result
-		-----------
-		...
-
-		Description
-		-----------
-		The Description..
-
-	.EXAMPLE
-		Get-nADUser AS88880 | Remove-nADUser -ShowLog -Department 8888
+		Get-nADUser AS88880 | Remove-nADUser -Department 8888
 		cls;Get-nADUser -Filter {Name -like "ATDSUM*"}  | Remove-nADUser -ShowLog
 
 		Result
@@ -65,7 +51,7 @@ Function Remove-nADUser {
 		The Description..
 
 	.EXAMPLE
-		"AS88880","AS88881" | Remove-nADUser -ShowLog -Department 8888 -Verbose
+		"AS88880","AS88881" | Remove-nADUser -Department 8888 -Verbose
 
 		Result
 		-----------
@@ -89,8 +75,7 @@ Function Remove-nADUser {
 	.OUTPUTS
 
     .LINK
-        Get-dSAMUser
-		Get-nADUser
+        Get-nADUser
 
 	#>
     [CmdletBinding()]
@@ -100,7 +85,6 @@ Function Remove-nADUser {
         [PSCustomObject[]] $Users = $null,
         [switch] $IsFromSAM,
         [switch] $Force,
-        [switch] $ShowLog,
         [string] $LPP = "#"
     )
     BEGIN {

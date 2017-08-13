@@ -1,4 +1,4 @@
-#  Copyright (c) EVRY AS. All rights reserved.
+#  Copyright (c) nOsliw Solutions. All rights reserved.
 #
 # THIS SAMPLE CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
 # WHETHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
@@ -51,15 +51,6 @@ Function Backup-nADUsers {
 
 	.OUTPUTS
 		dsquery * -filter "(&(objectCategory=person)(objectCategory=User)(samaccountname=*))" -attr cn distinguishedName mail homeDirectory sn givenName
-
-	.NOTES
-        Name         : Backup-nADUsers
-	    Module       : PSMS
-        Author       : Woodworth Wilson
-        Changed Log  : 2014-03-13; 1.0; Woodworth.Wilson@evry.com; Initial Version
-	                 : 2014-04-13; 1.1; Woodworth.Wilson@evry.com; Added section for ..
-					 : 2014-06-03; 1.2; Woodworth.Wilson@evry.com; Rearanges/renamed column names, Fixed Encoding output to UTF8
-
 
 	.LINK
         Backup-nADUsers

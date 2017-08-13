@@ -43,7 +43,6 @@ $hash = New-Object -TypeName HashTable -ArgumentList @{
     IsInteractive     = [Environment]::UserInteractive
     IsPS3             = $PSVersionTable.PSVersion.Major -ge 3
     HasExcel          = $False
-    ShowLog           = $True
     EventLogSource    = "PowerShell Module " + $modulename.ToString().toUpper()
     Settings          = New-Object -TypeName HashTable -ArgumentList @{
         IsADLoaded        = $False

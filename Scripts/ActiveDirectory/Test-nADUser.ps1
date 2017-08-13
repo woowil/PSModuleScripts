@@ -1,4 +1,4 @@
-#  Copyright (c) EVRY AS. All rights reserved.
+#  Copyright (c) nOsliw Solutions. All rights reserved.
 #
 # THIS SAMPLE CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
 # WHETHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
@@ -53,14 +53,7 @@ Function Test-nADUser {
 	.OUTPUTS
 		Test-nADUser
 
-	.NOTES
-        Name         : Test-nADUser
-	    Module       : PSMS
-        Author       : Woodworth Wilson
-        Changed Log  : 2013-04-XX; 1.0; Woodworth.Wilson@evry.com; Initial Version
-	                 : 2013-04-XY; 1.1; Woodworth.Wilson@evry.com; Added section for ..
-
-    .LINK
+	.LINK
 
 #>
     [CmdletBinding()]

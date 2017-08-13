@@ -1,4 +1,4 @@
-#  Copyright (c) EVRY AS. All rights reserved.
+#  Copyright (c) nOsliw Solutions. All rights reserved.
 #
 # THIS SAMPLE CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
 # WHETHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
@@ -34,9 +34,6 @@ Function Set-nADUser {
 
 	.PARAMETER IsFromSAM
         Specifies if the user account(s) is from SAM Jupiter
-
-	.PARAMETER ShowLog
-        Shows the progress message log.
 
 	.PARAMETER LPP
         Specifies the prefix used in message log. Default is '#'

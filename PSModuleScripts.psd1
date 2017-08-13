@@ -14,7 +14,7 @@
     GUID                   = '06DE7C05-006F-4793-89BB-003465167DDC'
 
     # Company or vendor of this module
-    CompanyName            = 'EVRY AS, Application Operations'
+    CompanyName            = 'nOsliw Solutions'
 
     # Copyright statement for this module
     Copyright              = '(c) 2017. All rights reserved'

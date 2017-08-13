@@ -1,4 +1,4 @@
-#  Copyright (c) EVRY AS. All rights reserved.
+#  Copyright (c) nOsliw Solutions. All rights reserved.
 #
 # THIS SAMPLE CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND,
 # WHETHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED
@@ -49,13 +49,6 @@ Function Get-nADUser {
 
 	.PARAMETER ExtendedProperty
 		Extra time consuming properties
-
-	.PARAMETER LogPopup
-		Switch parameter to popup processed log, results and error files
-
-	.PARAMETER LogToDFS
-		Switch parameter to partly allow local log files under $__locopdata\Output to be copied to remotely $__dfsopdata\Output
-		Note: To totally allow, $__nPSMS.LogToDFS must be $True
 
 	.PARAMETER LPP
 		Log progess prefix. Default is '#'
