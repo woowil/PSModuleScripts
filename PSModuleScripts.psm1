@@ -9,18 +9,15 @@
 
 # Error default handling. Check Get-Help about_commonparameters
 $ErrorActionPreference = "Stop" # Do not change. This shows all error upon import-module
-$VerbosePreference = "Continue"
+#$VerbosePreference = "Continue"
 
 $script:modulename = ($ExecutionContext.SessionState.Module).ToString()
 $script:identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $script:IsAdmin = (New-Object Security.Principal.WindowsPrincipal $identity).IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator)
 
 if (!$IsAdmin) {
-    Clear-Host
-    Write-Host
     $msg = "Problem`n`tThis $modulename module requires an Elevated Mode session environment.`n`tPlease re-import the module with an administrator elevated environment"
     Write-Host -Object "$msg" -ForegroundColor Red
-    Write-Host
     Break
 }
 
@@ -87,7 +84,7 @@ Initialize-nCommon -InputObject $__nPSMS
 $script:mObj = $MyInvocation.MyCommand.ScriptBlock.Module
 $script:mName = $MyInvocation.MyCommand.ScriptBlock.Module.name
 $mObj.OnRemove = {
-    if (Test-path -path Alias:\Log -PathType Leaf) {
+    if (Test-path -path Variable:\__nPSMS -PathType Leaf) {
 
         $__nPSMS.Errors.Clear()
         $__nPSMS.ErrorsCmdlet.Clear()
