@@ -42,7 +42,6 @@ $hash = New-Object -TypeName HashTable -ArgumentList @{
     HasExcel          = $False
     EventLogSource    = "PowerShell Module " + $modulename.ToString().toUpper()
     Settings          = New-Object -TypeName HashTable -ArgumentList @{
-        IsADLoaded        = $False
         InitializedCommon = $false
     }
     Invocation        = New-Object -TypeName HashTable -ArgumentList @{
