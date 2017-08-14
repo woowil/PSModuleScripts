@@ -1,0 +1,2 @@
+$globalIP = [System.Net.NetworkInformation.IPGlobalProperties]::GetIPGlobalProperties()
+PS C:\> $globalIP | get-member

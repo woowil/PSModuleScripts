@@ -330,11 +330,11 @@ Function Get-nADUser {
 
                 Add-Member -InputObject $oUser -MemberType NoteProperty -Name "__UserID" -Value $oUser.SamAccountName -Force
 
-                Write-Output -InputObject ($oUser | Select-Object -Property $Property)
+                $oUser | Select-Object -Property $Property
             }
         }
         catch [Exception] {
-            Write-Error -Exception $_.Exception
+            Write-Error -Exception $_
         }
     }
     END {

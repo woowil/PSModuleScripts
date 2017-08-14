@@ -1,0 +1,9 @@
+Get-Hotfix
+
+
+function Get-CMMissingUpdate {
+param (
+$computer = "localhost"
+)
+    Get-WmiObject -Query "SELECT * FROM CCM_SoftwareUpdate WHERE EVALUATIONSTATE = 8 OR EVALUATIONSTATE = 9 OR EVALUATIONSTATE = 10" -Namespace "ROOT\ccm\ClientSDK" -ComputerName $computer
+}
